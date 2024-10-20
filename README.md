@@ -58,14 +58,18 @@
 ## Installation
 
 ### Prerequrements
+### Download the model and upload inside FlipKart_6.0
+  - [Download](https://drive.google.com/file/d/1O5iNAqZ8xeuKwNiH6DIHDgwGe9UZIEfC/view?usp=drive_link)
+  
+
   - `python3.11`
   - `DB Browser` - to see the database
 
 ### Installation steps
 
   ```
-    git clone
-    cd
+    git clone https://github.com/Sabari2005/FlipKart-Grid_6.0
+    cd FlipKart-Grid_6.0
   ```
   ```
   pip install -r requirements.txt
