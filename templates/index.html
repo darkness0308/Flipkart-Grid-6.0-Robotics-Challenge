@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- <pre>
+ ________  ________   ______   __       __         ______    ______   _______    ______   _______   ______    __     ______    ______    ______    ______   _______  
+/        |/        | /      \ /  \     /  |       /      \  /      \ /       \  /      \ /       \ /      | _/  |   /      \  /      \  /      \  /      \ /       | 
+$$$$$$$$/ $$$$$$$$/ /$$$$$$  |$$  \   /$$ |      /$$$$$$  |/$$$$$$  |$$$$$$$  |/$$$$$$  |$$$$$$$  |$$$$$$/ / $$ |  /$$$$$$  |/$$$$$$  |/$$$$$$  |/$$$$$$  |$$$$$$$/  
+   $$ |   $$ |__    $$ |__$$ |$$$  \ /$$$ |      $$ \__$$/ $$ |__$$ |$$ |__$$ |$$ |__$$ |$$ |__$$ |  $$ |  $$$$ |  $$ ___$$ |$$____$$ |$$$  \$$ |$$$  \$$ |$$ |____  
+   $$ |   $$    |   $$    $$ |$$$$  /$$$$ |      $$      \ $$    $$ |$$    $$< $$    $$ |$$    $$<   $$ |    $$ |    /   $$<  /    $$/ $$$$  $$ |$$$$  $$ |$$      \ 
+   $$ |   $$$$$/    $$$$$$$$ |$$ $$ $$/$$ |       $$$$$$  |$$$$$$$$ |$$$$$$$  |$$$$$$$$ |$$$$$$$  |  $$ |    $$ |   _$$$$$  |/$$$$$$/  $$ $$ $$ |$$ $$ $$ |$$$$$$$  |
+   $$ |   $$ |_____ $$ |  $$ |$$ |$$$/ $$ |      /  \__$$ |$$ |  $$ |$$ |__$$ |$$ |  $$ |$$ |  $$ | _$$ |_  _$$ |_ /  \__$$ |$$ |_____ $$ \$$$$ |$$ \$$$$ |/  \__$$ |
+   $$ |   $$       |$$ |  $$ |$$ | $/  $$ |      $$    $$/ $$ |  $$ |$$    $$/ $$ |  $$ |$$ |  $$ |/ $$   |/ $$   |$$    $$/ $$       |$$   $$$/ $$   $$$/ $$    $$/ 
+   $$/    $$$$$$$$/ $$/   $$/ $$/      $$/        $$$$$$/  $$/   $$/ $$$$$$$/  $$/   $$/ $$/   $$/ $$$$$$/ $$$$$$/  $$$$$$/  $$$$$$$$/  $$$$$$/   $$$$$$/   $$$$$$/                                                                                                                                        
+        </pre> -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Flipart Grid</title>
+        <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../static/css/style.css">
+    </head>
+    <body>
+        <div class="intro" id="loadingAnimation" style="display: flex;">
+            <img src="../static/img/logo.png">
+        </div>
+        <div class="for-intro" id="for-intro" style="display: none;">
+            <div class="navbar">
+                <div class="logo">
+                    <img src="../static/img/logo.png">
+                </div>
+                <div class="notify_center">
+                    <div class="notification" id="notification">
+                        <div class="notify">
+                            <span id="notification-message">
+                                <!-- Notification message will appear here -->
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="side_panel">
+                <div class="btn-contain">
+                    <button class="btn-1" id="hotspot" onclick="changeButtonColor(this, 'hotspot-blue.png');document.getElementById('box1').scrollIntoView();">
+                        <img src="../static/img/hotspot-grey.png" loading="eager" alt="Hotspot">
+                    </button>
+                    <button class="btn-1"  onclick="changeButtonColor(this, 'cart-blue.png');document.getElementById('box2').scrollIntoView();">
+                        <img src="../static/img/cart-grey.png" loading="eager" alt="Cart">
+                    </button>
+                    <button class="btn-1" id="list" onclick="changeButtonColor(this, 'list-blue.png');document.getElementById('box3').scrollIntoView();">
+                        <img src="../static/img/list-grey.png" loading="eager" alt="List">             
+                    </button>
+                </div>
+                <div class="account">
+                    <button class="btn-1" onclick="handleButtonClick('no');changeButtonColor(this, 'account-blue.png');document.getElementById('box4').scrollIntoView();">
+                        <img src="../static/img/account-grey.png">
+                    </button>
+                </div> 
+            </div>
+            <div id="detailsBox" style="display:none;" class="popup-box">
+                <div class="details_content">
+                    <span>PRODUCT DETAILS</span>
+                    <table class="popup_table">
+                        <tr>
+                            <td>Brand name:</td>
+                            <td id="brandName"></td> <!-- Updated here -->
+                        </tr>
+                        <tr>
+                            <td>Product name:</td>
+                            <td id="productName"></td> <!-- Updated here -->
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td id="description"></td> <!-- Updated here -->
+                        </tr>
+                    </table>
+                </div>
+                <button onclick="closePopup()">Close</button>
+            </div> 
+            <div class="countDetailsBox" id="count_popup" style="display: none;">
+                <div class="count_box">
+                    <span>NUMBER OF COUNTS</span>
+                    <table class="count_display">
+                        
+                        <tr>
+                            <td>Product Name :</td>
+                            <td>Net :</td>
+                            <td>Mrp :</td>
+                            <td>Dates :</td>
+                        </tr>
+                        
+                        
+                    </table>
+                </div>
+                <button onclick="closeCountDetails()">Close</button>
+            </div>
+            <div id="fruitBox" style="display:none;" class="popup-box">
+                <div class="details_content">
+                    <span>FRESHNESS DETAILS</span>
+                    <table class="popup_table">
+                        <tr>
+                            <td>Name:</td>
+                            <td id="fruitName"></td> <!-- Updated here -->
+                        </tr>
+                        <tr>
+                            <td>freshness index:</td>
+                            <td id="freshness_index"></td> <!-- Updated here -->
+                        </tr>
+                        <tr>
+                            <td>Estimated shelf time:</td>
+                            <td id="estimation"></td> <!-- Updated here -->
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td id="fruit_description"></td> <!-- Updated here -->
+                        </tr>
+                    </table>
+                </div>
+                <button onclick="closefruitPopup()">Close</button>
+            </div> 
+            <div class="content">
+                <div class="contain1" id="box1">
+                    <div class="left">
+                        <div class="camera">
+                            <span>connecting....</span>
+                            <div class="loading-container">
+                                <div class="loading-line"></div>
+                            </div>
+                            <img id="videoFrame" src="">
+                            <!-- <canvas id="videoCanvas" height="450" width="500"></canvas> -->
+                            <div id="loading" class="loading-spinner"></div>
+                        </div>                    
+                        <div class="list">
+                        </div>
+                    </div>
+                    <div class="right" id="product-list">
+                        
+                    </div>
+                    
+                </div>
+                <div class="contain2" id="box2">
+                   
+                </div>
+                <div class="contain3" id="box3">
+                    <div class="left">
+                        <div class="camera">
+                            
+                            <div class="loading-container">
+                                <div class="loading-line"></div>
+                            </div>
+                            <img id="fruitFrame" src="">
+                            <!-- <canvas id="videoCanvas" height="450" width="500"></canvas> -->
+                            <div id="loading" class="loading-spinner"></div>
+                        </div> 
+                    </div>
+                    <div class="fruit-right" id="fruit-list">
+                                    
+                    </div>
+                    
+                </div>
+                <div class="contain4" id="box4">
+                    <div class="team-title">
+                        <span>TEAM SABARI132005</span>
+                    </div>
+                    <div class="member-contain">              
+                        <div class="member">
+                            <div class="member-title">
+                                <span>Member 3</span>
+                            </div>
+                            <div class="member-content">
+                                <div class="member-image">
+                                    <img src="/static/img/kavi.png">
+                                </div>
+                                <div class="member-details">
+                                    <span>KAVIARASU </span>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        <div class="member">
+                            <div class="member-title">
+                                <span>Member 4</span>
+                            </div>
+                            <div class="member-content">
+                                <div class="member-image">
+                                    
+                                </div>
+                                <div class="member-details">
+                                    <span>Sarathi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="member">
+                            <div class="member-title">
+                                <span>Member 1</span>
+                            </div>
+                            <div class="member-content">
+                                <div class="member-image">
+                                    <img src="/static/img/kamal.jpeg">
+                                </div>
+                                <div class="member-details">
+                                    <span>Kamal M</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="member">
+                            <div class="member-title">
+                                <span>Member 2</span>
+                            </div>
+                            <div class="member-content">
+                                <div class="member-image">
+                                    <img src="/static/img/ulogo.jpg">
+                                </div>
+                                <div class="member-details">
+                                    <span>Uvarajan D</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="member">
+                            <div class="member-title">
+                                <span>TEAM LEADER</span>
+                            </div>
+                            <div class="member-content">
+                                <div class="member-image">
+                                    <img src="/static/img/sabari.jpeg">
+                                </div>
+                                <div class="member-details">
+                                    <span>Sabari Vadivelan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+console.log("script connected");
+let videoStreamSocket = null;
+let fruitStreamSocket = null;
+function displayNotification(message) {
+    // Get the notification elements
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notification-message');
+
+    // Set the message inside the span
+    notificationMessage.textContent = message;
+
+    // Display the notification
+    notification.style.display = 'block';
+
+    // Optionally, hide the notification after 3 seconds
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000); // 3000ms = 3 seconds
+}
+// Function to start the video stream for /video_stream
+function startVideoStream1() {
+    if (videoStreamSocket !== null) {
+        videoStreamSocket.close(); // Close the connection if it already exists
+    }
+    videoStreamSocket = new WebSocket("ws://127.0.0.2:8001/video_stream");
+
+    videoStreamSocket.onopen = function() {
+        console.log("WebSocket connection for video_stream established");
+    };
+
+    videoStreamSocket.onmessage = function(event) {
+        const base64ImageData = event.data;
+        document.getElementById('videoFrame').src = 'data:image/jpeg;base64,' + base64ImageData;
+    };
+
+    videoStreamSocket.onclose = function() {
+        console.log("WebSocket connection for video_stream closed");
+    };
+
+    videoStreamSocket.onerror = function(error) {
+        console.log("WebSocket error (video_stream):", error);
+    };
+}
+
+function startVideoStream2() {
+    if (fruitStreamSocket !== null) {
+        fruitStreamSocket.close(); // Close the connection if it already exists
+    }
+    fruitStreamSocket = new WebSocket("ws://127.0.0.3:8002/fruit_stream");
+
+    fruitStreamSocket.onopen = function() {
+        console.log("WebSocket connection for fruit_stream established");
+    };
+
+    fruitStreamSocket.onmessage = function(event) {
+        const base64ImageData = event.data;
+        document.getElementById('fruitFrame').src = 'data:image/jpeg;base64,' + base64ImageData;
+    };
+
+    fruitStreamSocket.onclose = function() {
+        console.log("WebSocket connection for fruit_stream closed");
+    };
+
+    fruitStreamSocket.onerror = function(error) {
+        console.log("WebSocket error (fruit_stream):", error);
+    };
+}
+
+function handleButtonClick(buttonType) {
+    if (buttonType === 'video_stream') {
+        if (fruitStreamSocket !== null) {
+            fruitStreamSocket.close(); // Stop fruit stream if active
+            displayNotification("Switching to product model");
+        }
+        startVideoStream1(); // Start video stream
+    } else if (buttonType === 'fruit_stream') {
+        if (videoStreamSocket !== null) {
+            videoStreamSocket.close(); // Stop video stream if active
+            displayNotification("Switching to fruit model");
+        }
+        startVideoStream2(); // Start fruit stream
+    }
+    else{
+        fruitStreamSocket.close();
+        videoStreamSocket.close();
+    }
+}
+
+function changeButtonColor(button, newImage) {
+        // Remove 'active' class from all buttons
+                const buttons = document.querySelectorAll('.btn-1');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    // Reset image to grey version
+                    const img = btn.querySelector('img');
+                    const greySrc = img.src.replace(/-blue\.png$/, '-grey.png'); // Change to grey image
+                    img.src = greySrc; // Set the grey image
+                });
+
+                // Add 'active' class to the clicked button
+                button.classList.add('active');
+
+                // Change the image of the clicked button to the new image
+                const img = button.querySelector('img');
+                img.src = `../static/img/${newImage}`; // Set the new active image
+            }
+
+window.onload = function() {
+    const hotspotButton = document.getElementById('hotspot'); // Hotspot button
+    const listButton = document.getElementById('list'); // List button
+
+    // Start the video stream on load
+    hotspotButton.addEventListener('click', function() {
+        handleButtonClick('video_stream');
+        changeButtonColor(this, 'hotspot-blue.png');
+        document.getElementById('box1').scrollIntoView(); // Scroll to hotspot section
+    });
+
+    listButton.addEventListener('click', function() {
+        handleButtonClick('fruit_stream');
+        changeButtonColor(this, 'list-blue.png');
+        document.getElementById('box3').scrollIntoView(); // Scroll to list section
+    });
+
+    // Optionally, start the default video stream on page load
+    handleButtonClick('video_stream');
+    changeButtonColor(hotspotButton,'hotspot-blue.png'); // Start video stream by default
+};
+
+const popup = document.getElementById("popup");
+    
+function openPopup(productDetails) {
+    const detailsBox = document.getElementById('detailsBox');
+    // Update the popup content with product details
+    document.getElementById('brandName').textContent = productDetails.brandName;
+    document.getElementById('productName').textContent = productDetails.productName;
+    document.getElementById('description').innerHTML = productDetails.description;
+    // Show the popup
+    detailsBox.style.display = 'flex';
+}
+    
+function closePopup() {
+    const detailsBox = document.getElementById('detailsBox');
+    detailsBox.style.display = 'none';
+}
+        
+
+function fruitPopup(productDetails){
+    const detailsBox = document.getElementById('fruitBox');
+    console.log(productDetails);
+    // Update the popup content with product details
+    document.getElementById('fruitName').textContent = productDetails.fruitName;
+    document.getElementById('freshness_index').textContent = productDetails.freshIndex;
+    document.getElementById('estimation').innerHTML = productDetails.estimatedShelf;
+    document.getElementById('fruit_description').innerHTML = productDetails.description;
+    // Show the popup
+    detailsBox.style.display = 'flex';
+}
+
+function closefruitPopup() {
+    const detailsBox = document.getElementById('fruitBox');
+    detailsBox.style.display = 'none';
+}
+        
+// Automatically click the first button on page load
+const intro = document.getElementById('loadingAnimation');
+const mainContent = document.querySelector('.for-intro');
+            // Ensure the elements are available before continuing
+if (intro && mainContent) {
+    // Set a timeout to remove the loading animation after 2 seconds
+    setTimeout(() => {
+        // Start the fade-out animation for the loading animation
+        intro.classList.add('fade-out');
+        // After the fade-out is complete (1 second), hide the intro and show main content
+        setTimeout(() => {
+            intro.style.display = 'none'; // Hide the loading animation
+            mainContent.style.display = 'block'; // Change display to block first
+            setTimeout(() => {
+                mainContent.classList.add('fade-in'); // Start fade-in effect
+            }, 500); // Delay slightly to ensure display is set before transition
+        }, 1000); // Match this duration to the CSS transition duration
+    }, 1000); // Show the loading animation for 2 seconds
+}
+        // function escapeHtml(unsafe) {
+        //     return unsafe
+        //         .replace(/\\/g, '\\\\') // Escape backslashes
+        //         .replace(/'/g, "\\'")   // Escape single quotes
+        //         .replace(/"/g, '\\"')   // Escape double quotes
+        //         .replace(/&/g, "&amp;") // Escape ampersands
+        //         .replace(/</g, "&lt;")  // Escape less-than signs
+        //         .replace(/>/g, "&gt;"); // Escape greater-than signs
+        // }
+    
+let isDisconnected = false; // Track server disconnection status
+let disconnectTimer; // Timer for disconnection alert
+let latestFriutData=[];
+let latestData = []; // Declare and initialize the latest data array
+const loadedProductIds = new Set(); // To track loaded product IDs
+function fetchData() {
+    fetch('/get_data')  // Adjust this endpoint based on your FastAPI configuration
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log(data);
+            isDisconnected = false; // Reset disconnection status
+
+            if (data.message === "no new data found") {
+                // console.log("No new data");
+                return ;
+            } else {
+                console.log("Fetched Data:", data);
+                if (JSON.stringify(data) !== JSON.stringify(latestData)) {
+                    console.log("New data found");
+                    latestData = data;
+                    data.forEach(item => {
+                        console.log("Processing item:", item); // Log the current item
+
+                        // Use the correct property names to access item fields (based on your backend data structure)
+                        var productName = item.product_name || "N/A";
+                        var brandName = item.brand_name || "N/A";
+                        var net = item.net || "N/A";
+                        var mrp = item.mrp || "N/A";
+                        var expiryDate = item.expiry_date || "N/A";
+                        var manufactureDate = item.manufacture_date || "N/A";
+                        console.log(item.valid);
+                        var valid = item.valid || "N/A";
+                        var description = item.description || "no description found";
+
+                        // Create a div for the product and its table
+                        var productDiv = document.createElement('div');
+                        productDiv.classList.add('product');
+
+                        // Start building the table rows
+                        var tableRows = '';
+
+                        // Append rows only for non-"N/A" values
+                        if (productName !== "N/A") {
+                            tableRows += `<tr><td>Product Name:</td><td>${productName}</td></tr>`;
+                        }
+                        if (brandName !== "N/A") {
+                            tableRows += `<tr><td>Brand Name:</td><td>${brandName}</td></tr>`;
+                        }
+                        if (net !== "N/A") {
+                            tableRows += `<tr><td>Net:</td><td>${net}</td></tr>`;
+                        }
+                        if (mrp !== "N/A") {
+                            tableRows += `<tr><td>MRP:</td><td>${mrp}</td></tr>`;
+                        }
+                        if (expiryDate !== "N/A") {
+                            tableRows += `<tr><td>Expiry Date:</td><td>${expiryDate}</td></tr>`;
+                        }
+                        if (manufactureDate !== "N/A") {
+                            tableRows += `<tr><td>Manufacture Date:</td><td>${manufactureDate}</td></tr>`;
+                        }
+                        if (valid !== "N/A") {
+                            tableRows += `<tr><td>Valid:</td><td>${valid}</td></tr>`;
+                        }
+
+                        // Create the complete table HTML
+                        var tableHtml = `
+                            <table class="product_table">
+                                ${tableRows}
+                            </table>
+                            <button class="more_details" 
+                                onclick="openPopup({
+                                    brandName: '${escapeHtml(brandName)}', 
+                                    productName: '${escapeHtml(productName)}', 
+                                    description: '${escapeHtml(description)}'
+                                })">
+                                <span>For More Details</span>
+                                <img src="../static/img/arrow.png">
+                            </button>
+                        `;
+
+                        // Set the HTML content inside the div
+                        productDiv.innerHTML = tableHtml;
+
+                        // Append the product div to the product list in the DOM
+                        const productList = document.getElementById('product-list');
+                        productList.appendChild(productDiv);
+                    });
+                } else {
+                    console.log("No new data, data is the same as before.");
+                    
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            isDisconnected = true; // Set disconnection status
+        });
+}
+
+function fetchFruitData() {
+    fetch('/get_fruit_data')  // Adjust this endpoint based on your FastAPI configuration
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log(data);
+            isDisconnected = false; // Reset disconnection status
+
+            if (data.message === "no new data found") {
+                // console.log("No new data");
+                return ;
+            } else {
+                console.log("Fetched Data:", data);
+                if (JSON.stringify(data) !== JSON.stringify(latestFriutData)) {
+                    console.log("New data found");
+                    latestFriutData = data;
+
+                    // Clear the existing fruit list before appending new data
+                    const fruitList = document.getElementById('fruit-list');
+                
+
+                    data.forEach(item => {
+                        console.log("Processing item:", item); // Log the current item
+
+                        // Use the correct property names to access item fields (based on your backend data structure)
+                        var fruitName = item.fruit_name || "N/A";
+                        var fruitCondition = item.freshness_index || "N/A";
+                        var estimationShelf = item.estimated_shelf_time || "N/A";
+                        var fruitDesciption = item.fruit_description || "N/A";
+                        // Create a div for the fruit and its table
+                        var fruitDiv = document.createElement('div');
+                        fruitDiv.classList.add('fruit-product');
+                        var description = item.fruit_description || "no description found";
+                        // Start building the table rows
+                        var tableRows = '';
+                        let roundedStr = parseFloat(estimationShelf).toFixed(2);
+                        console.log(roundedStr);
+                        let roundedSt = parseFloat(fruitCondition).toFixed(2);
+                        console.log(roundedSt);
+
+                        // Append rows only for non-"N/A" values
+                        if (fruitName !== "N/A") {
+                            tableRows += `<tr><td>Name:</td><td style="border-top-left-radius: 5px;border-top-right-radius: 5px;">${fruitName}</td></tr>`;
+                        }
+                        if (fruitCondition !== "N/A") {
+                            tableRows += `<tr><td>Freshness index:</td><td style="border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;">${roundedSt}</td></tr>`;
+                        }
+                        if (estimationShelf !== "N/A") {
+                            tableRows += `<tr><td>Estimation Shelf Time:</td><td style="border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;">${roundedStr} days</td></tr>`;
+                        }
+                        
+                        
+
+                        // Create the complete table HTML
+                        var tableHtml = `
+                            <table class="product_table">
+                                ${tableRows}
+                            </table>
+                            <button class="more_details" 
+                                onclick="fruitPopup({
+                                    fruitName: '${escapeHtml(fruitName)}', 
+                                    freshIndex: '${escapeHtml(fruitCondition)}',
+                                    estimatedShelf: '${escapeHtml(estimationShelf)}', 
+                                    description: '${escapeHtml(description)}'
+                                })">
+                                <span>For More Details</span>
+                                <img src="../static/img/arrow.png">
+                            </button>
+                        `;
+
+                        // Set the HTML content inside the div
+                        fruitDiv.innerHTML = tableHtml;
+
+                        // Append the fruit div to the fruit list in the DOM
+                        if (tableRows) { // Only append if there are valid rows
+                            fruitList.appendChild(fruitDiv);
+                        }
+                    });
+                } else {
+                    // console.log("No new data, data is the same as before.");
+                    return
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            isDisconnected = true; // Set disconnection status
+        });
+}
+
+let latestcountData = null;
+
+function fetchAndDisplayBrands() {
+    fetch('/count_data')  // Adjust this endpoint based on your FastAPI configuration
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const box2 = document.getElementById("box2");
+            // Clear previous data in the container
+
+            // Check the server message
+            if (data.message === "no new data found") {
+                // box2.innerHTML = '<div>No new data found.</div>';  // Display message
+                return;  // Exit the function if no new data
+            }
+
+            // Extract brand counts
+            const brandCounts = Object.entries(data.data).map(([brand, details]) => ({
+                brand,
+                count: details.count,
+                rows: details.rows
+            }));
+
+            console.log(brandCounts);
+            box2.innerHTML = '';  // Clear previous data
+            
+            // Display brand names and counts
+            brandCounts.forEach(({ brand, count, rows }) => {
+                // Create the brand block for each brand
+                const brandBlock = `
+                    <div class="count-product">
+                        <div class="circle">
+                            <span>${brand.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <div class="countdatas">
+                            <table class="count_table">
+                                <tr>
+                                    <td>Brand Name:</td>
+                                    <td>${brand}</td>
+                                    <td>Count:</td>
+                                    <td><span>${count}</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button class="count-more-details"
+                            onclick="displayDetails('${brand}', ${rows.map(row => `{
+                                productId: ${row[0]},
+                                productName: '${row[1]}',
+                                brandName: '${row[2]}',
+                                net: '${row[3]}',
+                                mrp: '${row[4]}',
+                                expiryDate: '${row[5]}',
+                                valid:'${row[6]}'
+                            }`).join(", ")})"
+                        >
+                            <span>For More Details</span>
+                            <img src="../static/img/arrow.png">
+                        </button>
+                        
+                    </div>
+                `;
+                
+                // Append the brandBlock to box2
+                box2.innerHTML += brandBlock; // Use += to append content
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+// Function to handle the display of product details
+function displayDetails(brand, ...products) {
+    console.log(`Details for ${brand}:`);
+    const popup = document.getElementById("count_popup");
+    const tableBody = popup.querySelector(".count_display"); // Select the table body
+
+    // Clear any previous rows in the table
+    tableBody.innerHTML = `
+        <tr>
+            <td>Product Name:</td>
+            <td>Net:</td>
+            <td>MRP:</td>
+            <td>Expiry Dates:</td>
+            <td>Valid</td>
+        </tr>
+    `; // Reset the table header
+
+    // Iterate through the products and create table rows
+    products.forEach(product => {
+        const row = `
+            <tr>
+                <td>${product.productName}</td>
+                <td>${product.net}</td>
+                <td>${product.mrp}</td>
+                <td>${product.expiryDate}</td>
+                <td>${product.valid}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row; // Append each row to the table
+    });
+
+    // Show the popup
+    popup.style.display = "flex";
+}
+
+// Function to close the popup
+function closeCountDetails() {
+    const popup = document.getElementById("count_popup");
+    popup.style.display = "none"; // Hide the popup
+}
+
+
+setInterval(fetchData, 500);
+setInterval(fetchFruitData, 600);
+setInterval(fetchAndDisplayBrands, 700);
+// Helper function to escape HTML content
+function escapeHtml(unsafe) {
+    return unsafe.replace(/[&<"'>]/g, function (match) {
+        const escapeMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return escapeMap[match];
+    });
+}
+
+        
+        </script>
+    </body>
+</html>
