@@ -59,7 +59,7 @@
 
 ### Prerequrements
 ### Download the model and upload inside FlipKart_6.0
-  - [Download](https://drive.google.com/file/d/1O5iNAqZ8xeuKwNiH6DIHDgwGe9UZIEfC/view?usp=drive_link)
+  - [Download](https://drive.google.com/file/d/1r2YWdnmE_Z7NA7dUX96Cw7Ie8TmvcU-x/view?usp=drive_link)
   
 
   - `python3.11`
@@ -131,3 +131,9 @@
 - Uvarajan D (Member 2)
 - Kaviarasu K (Member 3)
 - Sarathi S (Member 4)
+
+
+## See our ppt here
+
+- [Download](https://docs.google.com/presentation/d/13D5QP3yGv6fAD_d8x2nDoX0ZLpIVwJJX/edit?usp=drive_link&ouid=108471139347338857018&rtpof=true&sd=true)
+- 
