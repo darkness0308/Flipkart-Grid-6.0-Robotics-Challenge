@@ -8,35 +8,35 @@
 - [Overview](#overview)
 - [Screenshot](#screenshot)
 - [Architecture Diagram](#my-process)
-- [Built with](#built-with)
+- [Built With](#built-with)
 - [Installation](#installation)
-- [Project structure](#structure)
+- [Project Structure](#structure)
 - [Result Analysis](#resultanalysis)
-- [Database storage](#database)
+- [Database Storage](#database)
 - [Author](#author)
 
 
 ## Overview
 - This is a solution to the [Smart Vision Technology Quality Control in Flipkart Grid 6.0 - Robotics Challenge](https://unstop.com/hackathons/flipkart-grid-60-robotics-challenge-flipkart-grid-60-flipkart-1024253). 
-- Our project is a real-time product detection and freshness monitoring system, leveraging YOLOv8 object detection to identify products, categorize them by brand, and evaluate the freshness of fruits and store it in the database.
+- Our project is a real-time Product Detection & Freshness Monitoring System, leveraging YOLOv8 Object Detection to identify products, categorize them by brand, and evaluate the Freshness of Fruits and Vegetables and store it in the DB.
 
 
 ## Screenshot
-- ### Product detection, recognition and extraction
+- ### Product Detection, Recognition and Extraction
   <img  src="./assets/image1.jpg">
   <img src="./assets/image2.jpg">
 
-- ### Brand based counting
+- ### Brand based Counting
   <img src="./assets/count1.jpg">
   <img src="./assets/count2.jpg">
 
-- ### Fruit freshness identification
+- ### Fruit Freshness Identification
   <img src="./assets/output.jpg">
 ## Architecture Diagram
 
 ![](assets/architecture.jpg)
 
-## Built with
+## Built With
 
 - ### Frontend:
   - HTML, CSS, JS
@@ -45,14 +45,14 @@
   - FastAPI
   - Python
   - YOLOv8 for object detection
-  - YOLOv11 (instant segmentation) for detecting fruit freshness
-  - KMeans clustering algorithm
+  - YOLOv11 (Instant Segmentation) for Detecting Fruits & Vegetables Freshness
+  - K-Means Clustering Algorithm
 - ### Database
   - Sqlite3
 - ### Libraries
   - `Ultralytics`
   - `Opencv-python`
-  - `numpy`, `pandas` for data handling
+  - `numpy`, `pandas` for Data Handling
   - `uvicorn` for FastAPI
 
 ## Installation
@@ -63,7 +63,7 @@
   
 
   - `Python3.11`
-  - `DB Browser` - to see the database
+  - `DB Browser` - To see the database
 
 ### Installation steps
 
@@ -74,22 +74,22 @@
   ```
   pip install -r requirements.txt
   ```
-  - In the `mode1_product.py`  `line 62` replace your webcam url
+  - In the `mode1_product.py`  `line 62` replace your Webcam URL
 
 ![](assets/url1.png)
 
-  - In the `model2_fruit.py` `line 31` replace your webcam url
+  - In the `model2_fruit.py` `line 31` replace your Webcam URL
 
  ![](assets/url2.png) 
 
 
-  - Execute each commands in a seperate terminal
+  - Execute each commands in a separate terminal
   ```
   python index.py
   python model1_fastapi.py
   python model2_fastapi.py
   ```
-  - Open ` http://127.0.0.1:8000` in your browser
+  - Open `http://127.0.0.1:8000` in your Browser
 
 ## Project structure
 
@@ -112,18 +112,18 @@
     ![](assets/detection.png) 
     ![](assets/product_model.png) 
     ![](assets/results.png) 
-- ### Fruit freshness detection model
-
+- ### Fruits & Vegetables Freshness Detection Model
 
 ## Sample model Output
-- ### Product details detection and recognition model(real time images)
+- ### Product details Detection and Recognition Model(Real-time Images)
   ![](assets/real-time.png) 
 
   ![](assets/real-time2.png) 
 
 ## Database Storage
 
-- you can see the product details in 
+- You can see the product details in
+
 ## Author
 
 - Sabari Vadivelan S (Team Leader)
