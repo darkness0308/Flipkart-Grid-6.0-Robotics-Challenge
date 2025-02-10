@@ -62,7 +62,7 @@
   - [Download](https://drive.google.com/file/d/1r2YWdnmE_Z7NA7dUX96Cw7Ie8TmvcU-x/view?usp=drive_link)
   
 
-  - `python3.11`
+  - `Python3.11`
   - `DB Browser` - to see the database
 
 ### Installation steps
@@ -126,14 +126,13 @@
 - you can see the product details in 
 ## Author
 
-- Sabari Vadivelan S (Team Leader) - Contact Gmail [sabari132005@gmail.com]()
+- Sabari Vadivelan S (Team Leader)
 - Kamal M (Member 1)
 - Uvarajan D (Member 2)
 - Kaviarasu K (Member 3)
 - Sarathi S (Member 4)
 
 
-## See our ppt here
+## See our PPT here
 
 - [Download](https://docs.google.com/presentation/d/13D5QP3yGv6fAD_d8x2nDoX0ZLpIVwJJX/edit?usp=drive_link&ouid=108471139347338857018&rtpof=true&sd=true)
-- 
